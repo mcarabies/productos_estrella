@@ -58,11 +58,14 @@ async def get_dashboard(request: Request, db: AsyncSession = Depends(get_session
                 o.created_at = o.created_at.astimezone(art_tz)
     
     # Pass products and orders to template
-    return templates.TemplateResponse("admin/dashboard.html", {
-        "request": request,
-        "products": products,
-        "orders": orders
-    })
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/dashboard.html",
+        context={
+            "products": products,
+            "orders": orders
+        }
+    )
 
 @router.post("/ingest")
 async def process_ingest(

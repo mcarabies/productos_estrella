@@ -25,7 +25,7 @@ async def get_login_page(request: Request):
     # If already logged in, redirect to dashboard
     if request.session.get("authenticated"):
         return RedirectResponse(url="/admin/dashboard", status_code=302)
-    return templates.TemplateResponse("admin/login.html", {"request": request})
+    return templates.TemplateResponse(request=request, name="admin/login.html")
 
 @router.post("/login", response_class=HTMLResponse)
 async def process_login(request: Request, username: str = Form(...), password: str = Form(...)):
@@ -37,8 +37,9 @@ async def process_login(request: Request, username: str = Form(...), password: s
     
     logger.warning("admin.login.failed", username=username)
     return templates.TemplateResponse(
-        "admin/login.html", 
-        {"request": request, "error": "Credenciales incorrectas. Intente nuevamente."}
+        request=request,
+        name="admin/login.html",
+        context={"error": "Credenciales incorrectas. Intente nuevamente."}
     )
 
 @router.get("/logout")
