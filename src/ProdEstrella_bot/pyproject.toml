@@ -1,0 +1,89 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "produestrella-bot"
+version = "0.1.0"
+description = "Automated WhatsApp Dropshipping Sales Bot with Gemini AI"
+readme = "README.md"
+requires-python = ">=3.13"
+license = { text = "MIT" }
+authors = [{ name = "ProdEstrella", email = "dev@productosestrella.club" }]
+
+dependencies = [
+    # ── Web Framework ──────────────────────────────────────────────────────────
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.34.0",
+
+    # ── Database ───────────────────────────────────────────────────────────────
+    "sqlalchemy[asyncio]>=2.0.38",
+    "sqlmodel>=0.0.22",
+    "asyncpg>=0.30.0",
+    "alembic>=1.14.0",
+
+    # ── Cache / Queue ──────────────────────────────────────────────────────────
+    "redis[asyncio]>=5.2.1",
+    "rq>=2.3.0",
+
+    # ── HTTP Client ────────────────────────────────────────────────────────────
+    "httpx>=0.28.1",
+
+    # ── Configuration ──────────────────────────────────────────────────────────
+    "pydantic>=2.11.0",
+    "pydantic-settings>=2.8.0",
+
+    # ── AI ─────────────────────────────────────────────────────────────────────
+    "google-genai>=1.7.0",
+
+    # ── Payments ───────────────────────────────────────────────────────────────
+    "mercadopago>=2.3.0",
+
+    # ── Logging ────────────────────────────────────────────────────────────────
+    "structlog>=25.1.0",
+
+    # ── Utilities ──────────────────────────────────────────────────────────────
+    "python-multipart>=0.0.20",   # form data support
+    "python-jose[cryptography]>=3.4.0",  # JWT (future auth)
+    "orjson>=3.10.14",            # fast JSON serialization
+    "jinja2>=3.1.4",              # template rendering
+    "itsdangerous>=2.2.0",        # session middleware
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.5",
+    "pytest-asyncio>=0.25.3",
+    "httpx>=0.28.1",             # async test client
+    "coverage[toml]>=7.6.12",
+    "ruff>=0.9.9",
+    "mypy>=1.14.1",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+# ── Ruff linter ────────────────────────────────────────────────────────────────
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "ANN"]
+ignore = ["ANN101", "ANN102"]
+
+# ── Mypy ───────────────────────────────────────────────────────────────────────
+[tool.mypy]
+python_version = "3.13"
+strict = true
+plugins = ["pydantic.mypy", "sqlalchemy.ext.mypy.plugin"]
+
+# ── Pytest ─────────────────────────────────────────────────────────────────────
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+# ── Coverage ───────────────────────────────────────────────────────────────────
+[tool.coverage.run]
+source = ["app"]
+omit = ["migrations/*", "tests/*"]

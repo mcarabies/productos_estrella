@@ -1,0 +1,206 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# Productos Estrella — Unified Docker Compose Configuration
+# ══════════════════════════════════════════════════════════════════════════════
+
+name: productos-estrella
+
+x-restart-policy: &restart-policy
+  restart: unless-stopped
+
+x-logging: &default-logging
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+networks:
+  proxy_network:
+    name: proxy_network
+    external: true
+  internal_network:
+    name: productos_estrella_internal
+    internal: true
+
+volumes:
+  bot_postgres_data:
+    driver: local
+  bot_redis_data:
+    driver: local
+
+services:
+
+  # ─── SUBPROYECTO 1: ProdEstrella_bot (Servicios de Respaldo) ────────────────
+
+  # PostgreSQL Database (Version 17)
+  bot-db:
+    image: postgres:17-alpine
+    <<: [ *restart-policy, *default-logging ]
+    env_file:
+      - ./src/ProdEstrella_bot/.env
+    volumes:
+      - bot_postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    command: >
+      postgres
+        -c max_connections=200
+        -c shared_buffers=256MB
+        -c effective_cache_size=768MB
+        -c maintenance_work_mem=64MB
+        -c checkpoint_completion_target=0.9
+        -c wal_buffers=16MB
+        -c default_statistics_target=100
+        -c random_page_cost=1.1
+        -c effective_io_concurrency=200
+        -c work_mem=4MB
+        -c min_wal_size=1GB
+        -c max_wal_size=4GB
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - internal_network
+
+  # Redis Cache & Session Store
+  bot-cache:
+    image: redis:7.4-alpine
+    <<: [ *restart-policy, *default-logging ]
+    env_file:
+      - ./src/ProdEstrella_bot/.env
+    volumes:
+      - bot_redis_data:/data
+    command: >
+      redis-server
+        --requirepass ${REDIS_PASSWORD}
+        --maxmemory 256mb
+        --maxmemory-policy allkeys-lru
+        --appendonly yes
+        --appendfilename "appendonly.aof"
+        --save 900 1
+        --save 300 10
+        --save 60 10000
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - internal_network
+
+  # Evolution API v2.3.7 (WhatsApp Gateway)
+  bot-evolution:
+    image: evoapicloud/evolution-api:v2.3.7
+    <<: [ *restart-policy, *default-logging ]
+    depends_on:
+      bot-db:
+        condition: service_healthy
+      bot-cache:
+        condition: service_healthy
+    env_file:
+      - ./src/ProdEstrella_bot/.env
+    environment:
+      SERVER_TYPE: http
+      SERVER_PORT: 8080
+      SERVER_URL: https://${EVO_DOMAIN}
+      AUTHENTICATION_TYPE: apikey
+      AUTHENTICATION_API_KEY: ${EVOLUTION_API_KEY}
+      AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES: "true"
+      DATABASE_ENABLED: "true"
+      DATABASE_PROVIDER: postgresql
+      DATABASE_CONNECTION_URI: ${EVOLUTION_POSTGRES_URL}
+      DATABASE_CONNECTION_CLIENT_NAME: evolution_client
+      DATABASE_SAVE_DATA_INSTANCE: "true"
+      DATABASE_SAVE_DATA_NEW_MESSAGE: "true"
+      DATABASE_SAVE_MESSAGE_UPDATE: "true"
+      DATABASE_SAVE_DATA_CONTACTS: "true"
+      DATABASE_SAVE_DATA_CHATS: "true"
+      DATABASE_SAVE_DATA_LABELS: "true"
+      DATABASE_SAVE_DATA_HISTORIC: "true"
+      CACHE_REDIS_ENABLED: "true"
+      CACHE_REDIS_URI: ${EVOLUTION_REDIS_URL}
+      CACHE_REDIS_PREFIX_KEY: evolution
+      CACHE_REDIS_SAVE_INSTANCES: "true"
+      CACHE_LOCAL_ENABLED: "false"
+      WEBHOOK_GLOBAL_URL: https://bot.productosestrella.club/webhooks/whatsapp
+      WEBHOOK_GLOBAL_ENABLED: "true"
+      WEBHOOK_GLOBAL_WEBHOOK_BY_EVENTS: "false"
+      WEBHOOK_EVENTS_MESSAGES_SET: "true"
+      WEBHOOK_EVENTS_MESSAGES_UPSERT: "true"
+      WEBHOOK_EVENTS_MESSAGES_UPDATE: "true"
+      WEBHOOK_EVENTS_CONNECTION_UPDATE: "true"
+      LOG_LEVEL: WARN
+      DEL_INSTANCE: "false"
+      QRCODE_LIMIT: 30
+    networks:
+      - proxy_network
+      - internal_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy_network"
+      - "traefik.http.routers.bot-evolution.rule=Host(`${EVO_DOMAIN}`)"
+      - "traefik.http.routers.bot-evolution.entrypoints=websecure"
+      - "traefik.http.routers.bot-evolution.tls=true"
+      - "traefik.http.routers.bot-evolution.tls.certresolver=letsencrypt"
+      - "traefik.http.services.bot-evolution.loadbalancer.server.port=8080"
+
+  # FastAPI Sales Bot App
+  bot-app:
+    image: prodestrella-bot:latest
+    build:
+      context: ./src/ProdEstrella_bot
+      dockerfile: Dockerfile
+      target: runtime
+    <<: [ *restart-policy, *default-logging ]
+    depends_on:
+      bot-db:
+        condition: service_healthy
+      bot-cache:
+        condition: service_healthy
+    env_file:
+      - ./src/ProdEstrella_bot/.env
+    environment:
+      - PYTHONPATH=/app
+    networks:
+      - proxy_network
+      - internal_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy_network"
+      - "traefik.http.routers.bot-app.rule=Host(`bot.productosestrella.club`) || Host(`${LINK_DOMAIN}`)"
+      - "traefik.http.routers.bot-app.entrypoints=websecure"
+      - "traefik.http.routers.bot-app.tls=true"
+      - "traefik.http.routers.bot-app.tls.certresolver=letsencrypt"
+      - "traefik.http.services.bot-app.loadbalancer.server.port=8000"
+
+
+  # ─── SUBPROYECTO 2: productosEstrella_Infoproductos (Landings) ──────────────
+
+  # FastAPI Landing Creator App
+  infoprod-app:
+    build:
+      context: ./src/productosEstrella_Infoproductos
+      dockerfile: Dockerfile
+    image: productosestrella-infoproductos:latest
+    <<: [ *restart-policy, *default-logging ]
+    volumes:
+      - ./src/productosEstrella_Infoproductos/products:/app/products
+      - ./src/productosEstrella_Infoproductos/shared:/app/shared
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - proxy_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy_network"
+      - "traefik.http.routers.infoprod-app.rule=Host(`infoprod.productosestrella.club`)"
+      - "traefik.http.routers.infoprod-app.entrypoints=websecure"
+      - "traefik.http.routers.infoprod-app.tls=true"
+      - "traefik.http.routers.infoprod-app.tls.certresolver=letsencrypt"
+      - "traefik.http.services.infoprod-app.loadbalancer.server.port=8000"

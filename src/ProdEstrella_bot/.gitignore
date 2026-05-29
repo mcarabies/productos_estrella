@@ -1,0 +1,50 @@
+# Generic Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment / secrets
+.env
+.env.local
+*.pem
+*.key
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Docker
+*.override.yml
+
+# Alembic
+migrations/versions/*.pyc
+
+# Logs
+*.log
+logs/
+
+# Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Traefik certs (never commit)
+traefik/letsencrypt/
+acme.json
+
+# -- Folders ---------------------------------------------------
+.documentacion_dev

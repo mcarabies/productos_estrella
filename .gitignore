@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Databases & Cache local
+db.sqlite3
+postgres_data/
+redis_data/
+
+# Environments & Configuration
+.env
+.env.*
+!.env.example
+
+# IDEs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# OS
+Thumbs.db
+EHthumbs.db
+Desktop.ini
+
+# Logs
+*.log
+remote_logs.txt
+remote_ai_logs.txt
+
+# Traefik local/test files
+acme.json
+traefik/acme.json

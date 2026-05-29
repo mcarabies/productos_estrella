@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es" x-data="catalogApp()">
+
+<head>
+  <!-- TikTok Pixel Code Start -->
+  <script>
+    !function (w, d, t) {
+      w.TiktokAnalyticsObject = t; var ttq = w[t] = w[t] || []; ttq.methods = ["page", "track", "identify", "instances", "debug", "on", "off", "once", "ready", "alias", "group", "enableCookie", "disableCookie", "holdConsent", "revokeConsent", "grantConsent"], ttq.setAndDefer = function (t, e) { t[e] = function () { t.push([e].concat(Array.prototype.slice.call(arguments, 0))) } }; for (var i = 0; i < ttq.methods.length; i++)ttq.setAndDefer(ttq, ttq.methods[i]); ttq.instance = function (t) {
+        for (
+          var e = ttq._i[t] || [], n = 0; n < ttq.methods.length; n++)ttq.setAndDefer(e, ttq.methods[n]); return e
+      }, ttq.load = function (e, n) {
+        var r = "https://analytics.tiktok.com/i18n/pixel/events.js", o = n && n.partner; ttq._i = ttq._i || {}, ttq._i[e] = [], ttq._i[e]._u = r, ttq._t = ttq._t || {}, ttq._t[e] = +new Date, ttq._o = ttq._o || {}, ttq._o[e] = n || {}; n = document.createElement("script")
+          ; n.type = "text/javascript", n.async = !0, n.src = r + "?sdkid=" + e + "&lib=" + t; e = document.getElementsByTagName("script")[0]; e.parentNode.insertBefore(n, e)
+      };
+
+
+      ttq.load('D7432QJC77UCBSL4PCJG');
+      ttq.page();
+    }(window, document, 'ttq');
+  </script>
+  <!-- TikTok Pixel Code End -->
+
+
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      }); var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-WJH37ZW9');</script>
+  <!-- End Google Tag Manager -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Productos Estrella — Ebooks Premium</title>
+  <meta name="description"
+    content="Descubre nuestra colección de ebooks premium. Aprende, crece y transforma tu vida con conocimiento de calidad." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: {
+              50: '#fdf4ff',
+              100: '#f9e8ff',
+              500: '#a855f7',
+              600: '#9333ea',
+              700: '#7e22ce',
+            },
+            accent: { 400: '#fb923c', 500: '#f97316' }
+          },
+          animation: {
+            'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4,0,0.6,1) infinite',
+          },
+          keyframes: {
+            fadeInUp: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    [x-cloak] {
+      display: none !important;
+    }
+
+    .card-hover {
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(168, 85, 247, .25);
+    }
+
+    .badge {
+      background: linear-gradient(135deg, #a855f7, #7e22ce);
+      color: white;
+      padding: 2px 10px;
+      border-radius: 9999px;
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .05em;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
+      color: white;
+      font-weight: 700;
+      transition: filter .2s, transform .2s;
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.12);
+      transform: scale(1.02);
+    }
+
+    .hero-gradient {
+      background: linear-gradient(135deg, #0f0524 0%, #1e0844 50%, #0f0524 100%);
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, .04);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .filter-btn {
+      transition: all .2s ease;
+    }
+
+    .filter-btn.active {
+      background: linear-gradient(135deg, #a855f7, #7e22ce);
+      color: white;
+      border-color: transparent;
+    }
+
+    .price-tag {
+      background: linear-gradient(135deg, #fb923c, #f97316);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .animated-entrance {
+      animation-name: fadeInUp;
+      animation-duration: 0.4s;
+      animation-timing-function: ease;
+      animation-fill-mode: both;
+    }
+  </style>
+</head>
+
+<body class="bg-[#0f0524] text-white font-sans min-h-screen" x-cloak>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WJH37ZW9" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <!-- ── HERO ──────────────────────────────────────────────────── -->
+  <header class="hero-gradient relative overflow-hidden">
+    <!-- Glow orbs -->
+    <div class="absolute top-[-80px] left-[-80px] w-96 h-96 rounded-full bg-purple-700/20 blur-3xl pointer-events-none">
+    </div>
+    <div
+      class="absolute bottom-[-60px] right-[-60px] w-80 h-80 rounded-full bg-purple-500/15 blur-3xl pointer-events-none">
+    </div>
+
+    <nav class="relative z-10 max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="text-2xl">⭐</span>
+        <span class="text-xl font-bold tracking-tight">Productos<span class="text-brand-500">Estrella</span></span>
+      </div>
+      <a href="https://productosestrella.club"
+        class="text-sm text-white/60 hover:text-white transition">productosestrella.club</a>
+    </nav>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-6 py-20 text-center">
+      <span class="inline-block badge mb-4 text-xs">📚 EBOOKS PREMIUM</span>
+      <h1 class="text-5xl md:text-6xl font-black leading-tight mb-6">
+        Transforma tu vida con<br />
+        <span class="bg-gradient-to-r from-brand-500 to-accent-400 bg-clip-text text-transparent">
+          conocimiento real
+        </span>
+      </h1>
+      <p class="text-lg text-white/60 max-w-2xl mx-auto">
+        Selección curada de ebooks diseñados para llevar tus resultados al siguiente nivel.
+        Cada guía es accionable, directa y enfocada en resultados.
+      </p>
+    </div>
+  </header>
+
+  <!-- ── CATÁLOGO ────────────────────────────────────────────────── -->
+  <main class="max-w-7xl mx-auto px-6 py-16">
+
+    <!-- Filtros -->
+    {% if categories %}
+    <div class="flex flex-wrap gap-3 justify-center mb-12">
+      <button class="filter-btn px-5 py-2 rounded-full border border-white/20 text-sm font-medium"
+        :class="activeCategory === '' ? 'active' : 'text-white/60 hover:border-brand-500 hover:text-white'"
+        @click="activeCategory = ''">Todos</button>
+      {% for cat in categories %}
+      <button class="filter-btn px-5 py-2 rounded-full border border-white/20 text-sm font-medium"
+        :class="activeCategory === '{{ cat }}' ? 'active' : 'text-white/60 hover:border-brand-500 hover:text-white'"
+        @click="activeCategory = '{{ cat }}'">{{ cat }}</button>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Búsqueda -->
+    <div class="max-w-md mx-auto mb-12">
+      <div class="relative">
+        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">🔍</span>
+        <input type="text" placeholder="Buscar ebook…" x-model="searchQuery"
+          class="w-full pl-10 pr-4 py-3 rounded-xl glass text-sm text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-brand-500" />
+      </div>
+    </div>
+
+    <!-- Grilla de productos -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="products-grid">
+      {% for product in products %}
+      <article class="card-hover glass rounded-2xl overflow-hidden flex flex-col animated-entrance"
+        x-show="isVisible('{{ product.slug }}', '{{ product.categoria | default('General') }}', '{{ product.titulo }}')"
+        x-transition :style="'animation-delay: ' + ({{ loop.index0 }} * 0.06) + 's'"
+        data-category="{{ product.categoria | default('General') }}" data-title="{{ product.titulo }}"
+        data-slug="{{ product.slug }}">
+        <!-- Thumbnail -->
+        <a href="/{{ product.slug }}"
+          class="block relative overflow-hidden h-52 bg-gradient-to-br from-brand-700/40 to-purple-900/60">
+          <img src="{{ product.thumbnail }}" alt="{{ product.titulo }}"
+            class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" loading="lazy"
+            onerror="this.style.display='none'" />
+          <span class="absolute top-3 left-3 badge">{{ product.categoria | default('General') }}</span>
+        </a>
+
+        <!-- Info -->
+        <div class="p-6 flex flex-col flex-1">
+          <h2 class="text-lg font-bold leading-snug mb-2">{{ product.titulo }}</h2>
+          <p class="text-sm text-white/55 leading-relaxed flex-1">{{ product.descripcion_corta }}</p>
+
+          <div class="mt-5 flex items-center justify-end">
+            <a href="/{{ product.slug }}"
+              class="btn-primary px-5 py-2.5 rounded-xl text-sm inline-block" onclick="event.stopPropagation()">
+              Ver Detalles →
+            </a>
+          </div>
+
+          <a href="/{{ product.slug }}" class="mt-3 text-xs text-center text-white/40 hover:text-brand-400 transition">
+            Ver más detalles
+          </a>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+
+    <!-- Sin resultados -->
+    <div x-show="noResults()" x-transition class="text-center py-20">
+      <p class="text-5xl mb-4">🔍</p>
+      <h3 class="text-xl font-bold mb-2">No encontramos ebooks</h3>
+      <p class="text-white/50 text-sm">Intenta con otra categoría o término de búsqueda.</p>
+    </div>
+
+    <!-- Sin productos en absoluto -->
+    {% if not products %}
+    <div class="text-center py-20">
+      <p class="text-6xl mb-4">📦</p>
+      <h3 class="text-2xl font-bold mb-2">Catálogo en construcción</h3>
+      <p class="text-white/50">Muy pronto tendremos productos disponibles para ti.</p>
+    </div>
+    {% endif %}
+  </main>
+
+  <!-- ── FOOTER ─────────────────────────────────────────────────── -->
+  <footer class="border-t border-white/10 mt-20 py-10 text-center">
+    <p class="text-sm text-white/30">
+      © 2025 Productos Estrella — Todos los derechos reservados.
+      <a href="https://productosestrella.club" class="hover:text-brand-400 transition">productosestrella.club</a>
+    </p>
+  </footer>
+
+  <script>
+    function catalogApp() {
+      return {
+        activeCategory: '',
+        searchQuery: '',
+
+        isVisible(slug, category, title) {
+          const matchCat = this.activeCategory === '' || category === this.activeCategory;
+          const matchText = this.searchQuery === '' ||
+            title.toLowerCase().includes(this.searchQuery.toLowerCase());
+          return matchCat && matchText;
+        },
+
+        noResults() {
+          const cards = document.querySelectorAll('#products-grid article');
+          if (cards.length === 0) return false;
+          return [...cards].every(c => c.style.display === 'none' || c.hidden);
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>
