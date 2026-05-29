@@ -33,6 +33,10 @@ class Settings(BaseSettings):
     app_debug: bool = False
     app_secret_key: SecretStr = Field(..., min_length=32)
     log_level: str = "INFO"
+    
+    # ── Admin Credentials ──────────────────────────────────────────────────────
+    admin_username: str = "mcarabies"
+    admin_password: SecretStr = SecretStr("29232436mjC**")
 
     # ── Domains ────────────────────────────────────────────────────────────────
     app_domain: str = "api.productosestrella.club"
